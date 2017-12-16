@@ -31,6 +31,15 @@ impl List {
     }
 }
 
+impl Drop for List {
+    fn drop(&mut self) {
+        let mut curr_link = mem::replace(&mut self.head, Link::Empty);
+        while let Link::More(mut node) = curr_link {
+            curr_link = mem::replace(&mut node.next, Link::Empty);
+        }
+    }
+}
+
 enum Link {
     Empty,
     More(Box<Node>),
